@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<title>Fényes Balázs weboldala</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/github_markdown.css">
+<style>
+.markdown-body{box-sizing:border-box;min-width:200px;max-width:980px;margin:0 auto;padding:45px;}
+</style>
+<link rel="icon" href="/favicon.ico">
+<style type="text/css">
+code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
+</style>
+</head>
+<body class="markdown-body">
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
+    }
+});
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<a href="/index.html">&lt; Kezdőlap</a>
+<hr>
+<h1>Sudoku solver using backtracking</h1>
+
+<p>The source code and example boards are available <a href="https://github.com/fenyesb/sudoku">here</a>.</p>
+
+<p>This program solves an incomplete sudoku board. The algorithm is as follows: the first available empty space is set to 1; if this leads to an unsolvable board, increment the last number, or if 9 is reached, then go back one step. It is considered solved, when all the board is correct and no more empty cells remain.</p>
+
+<p>Most of the boards are solved in less than a second, the hardest board I found (constructed by a mathematican) is solved in around 10 seconds, and took 17 million steps.</p>
+
+<p>Here is an example output of the program:</p>
+
+<p><img src="sudoku/sudoku.png" alt="The program solves a sudoku board" title="The program solves a sudoku board" /></p>
+<hr>
+Kapcsolat:
+<a href="mailto:f_dot_balazs96_at_gmail_dot_com">
+<img src="/email.png" alt="Email">
+</a>
+<a href="https://github.com/fenyesb">
+<img src="/github.png" alt="Github">
+</a>
+</body>
+</html>

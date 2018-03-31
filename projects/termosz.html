@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<title>Fényes Balázs weboldala</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/github_markdown.css">
+<style>
+.markdown-body{box-sizing:border-box;min-width:200px;max-width:980px;margin:0 auto;padding:45px;}
+</style>
+<link rel="icon" href="/favicon.ico">
+<style type="text/css">
+code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
+</style>
+</head>
+<body class="markdown-body">
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
+    }
+});
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<a href="/index.html">&lt; Kezdőlap</a>
+<hr>
+<h1>Termosz vízhőmérsékletének mérése</h1>
+
+<p>Egy termoszba forrásban lévő vizet töltöttem, majd egy DS18B20 hőmérsékletszenzort helyeztem bele. (<a href="termosz/DS18B20.pdf">adatlap</a>) A szenzor pontossága ±0.5°C, felbontása 0.06°C, a mérések kb. 2 másodpercenként történtek. A mérés zárt helyiségben zajlott, ezért a légmozgás minimális volt, a léghőmérséklet az asztalon lévő termosz közelébe helyezett hőmérő szerint 21±1°C volt, a fali hőmérő szerint 20.5±0.5°C. A termosz üres tömege 336 g, a víz tömege 389 g (ez a mérés elején és végén néhány grammon belül megegyezett, hiszen a lezárt edényből nem tudott a víz elpárologni). A termosz+víz rendszer hőkapacitására kb. 1.8 kJ/K értéket számítottam. A mérést 21 órán át végeztem, így kb. 40000 adatpontot kaptam.</p>
+
+<p><img src="termosz/termosz_foto.jpg" alt="A mérési elrendezés" title="A mérési elrendezés" /></p>
+
+<p>Azt várnánk, hogy a hőmérsékleti görbe exponenciálisan csökkenve tart a környezeti hőmérséklethez, hiszen a hővezetés és a hőáramlás útján történő hőveszteség közelítőleg a belső és környezeti hőmérsékletkülönbséggel lineárisan arányos. De egy ilyen exp. görbét illesztve rá kiderül, hogy az első néhány órában jóval meredekebb a görbe a vártnál, ami azt mutatja, hogy ekkor még a hősugárzás révén is jelentős a hőveszteség.</p>
+
+<p><img src="termosz/termosz_grafikon.png" alt="A hőmérséklet és a hőmérsékletváltozás az idő függvényében" title="A hőmérséklet és a hőmérsékletváltozás az idő függvényében" /></p>
+<hr>
+Kapcsolat:
+<a href="mailto:f_dot_balazs96_at_gmail_dot_com">
+<img src="/email.png" alt="Email">
+</a>
+<a href="https://github.com/fenyesb">
+<img src="/github.png" alt="Github">
+</a>
+</body>
+</html>

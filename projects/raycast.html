@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<title>Fényes Balázs weboldala</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/github_markdown.css">
+<style>
+.markdown-body{box-sizing:border-box;min-width:200px;max-width:980px;margin:0 auto;padding:45px;}
+</style>
+<link rel="icon" href="/favicon.ico">
+<style type="text/css">
+code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
+</style>
+</head>
+<body class="markdown-body">
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
+    }
+});
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<a href="/index.html">&lt; Kezdőlap</a>
+<hr>
+<h1>3D-like game rendered with raycasting using SDL and C</h1>
+
+<p>The source code and a compiled executable is available <a href="https://github.com/fenyesb/raycast">here</a>.</p>
+
+<p>This game procedurally generates a maze-like map consisting of rooms of various shapes and colors and opens randomly placed doorways between them, the walls of the rooms detect collisions, so the player can't go through them.</p>
+
+<p>The player controls their position and horizontal rotation using the <em>WASD</em> and <em>QE</em> keys. The goal is to collect as many points as possible before the time limit is reached. You can get points or additional time by collecting the beam-shaped objects. The highest scores are recorded in a scoreboard.</p>
+
+<p>The current points and the remaning time along with a minimap is shown on screen.</p>
+
+<p><img src="raycast/raycast.png" alt="Screenshot" title="Screenshot" /></p>
+<hr>
+Kapcsolat:
+<a href="mailto:f_dot_balazs96_at_gmail_dot_com">
+<img src="/email.png" alt="Email">
+</a>
+<a href="https://github.com/fenyesb">
+<img src="/github.png" alt="Github">
+</a>
+</body>
+</html>

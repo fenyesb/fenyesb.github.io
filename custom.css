@@ -1,0 +1,17 @@
+.plang
+{
+	border: dotted white 2px;
+	background: lightblue;
+	border-radius: 10px;
+	margin: 5px;
+	padding: 5px;
+}
+
+.device
+{
+	border: dotted white 2px;
+	background: lightsalmon;
+	border-radius: 10px;
+	margin: 5px;
+	padding: 5px;
+}

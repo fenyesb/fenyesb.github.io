@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<title>Fényes Balázs weboldala</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/github_markdown.css">
+<style>
+.markdown-body{box-sizing:border-box;min-width:200px;max-width:980px;margin:0 auto;padding:45px;}
+</style>
+<link rel="icon" href="/favicon.ico">
+<style type="text/css">
+code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
+</style>
+</head>
+<body class="markdown-body">
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
+    }
+});
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<a href="/index.html">&lt; Kezdőlap</a>
+<hr>
+<h1>Vonalkövető/távirányítós robot</h1>
+
+<p>A robot képes egy fehér háttéren lévő sötétebb színű csík követésére, illetve távirányítóval átkapcsolható kézi irányításra is.</p>
+
+<p><img src="robot/robot.jpg" alt="Fénykép a robotról" title="Fénykép a robotról" /></p>
+
+<p>A vonal érzékelését két fotorezisztorral oldottam meg, amik mellett fehér 1-1 fehér LED is világít lefelé. A fotorezisztorok a robot alján, majdnem a legelején találhatóak. A fotorezisztorok egy előtétellenállással feszültségosztóként viselkednek, ebből következtetni arra, hogy alattuk éppen mi található. Induláskor megméri a két szenzor feszültségét, és ezek különbségéhez fog viszonyítani. Ha ettől kisebb vagy nagyobb különbséget mér, akkor fokozatosan növeli/csökkenti a kerekek sebességét. Ez a fajta útkövetés csak akkor működik helyesen, ha a csík a két szenzor között marad. A robot sebessége erősen le van korlátozva, mert ha a túllőne a vonalon, akkor általában nem tud visszatalálni. Sajnos a motorok vezérlése PWM jellel nem lineáris, ez okozza a videón is látható szakaszos mozgást. A kerekeket kb. 20%-os kitöltési tényezőjű jellel lehet megmozdítani, a max. sebességet 30%-ra állítottam.</p>
+
+<p><video controls>
+  <source src="/videos/robot.mp4" type="video/mp4">
+</video> </p>
+
+<p><img src="robot/robot_sensors.jpg" alt="Fényérzékelő szenzorok" title="Fényérzékelő szenzorok" /></p>
+
+<p>A két kerék külön-külön vezérelhető. A sebesség és irány is beállítható. A motorok az áttétel miatt lassúak, de nagy a forgatónyomatékuk. <a href="https://www.hestore.hu/prod_10022527.html">hestore link</a></p>
+
+<p><img src="robot/robot_motor.jpg" alt="Áttételes motor" title="Áttételes motor" /></p>
+
+<p>A vezérlőegység egy ATTINY24 mikroprocesszor (2 KB ROM, 128 B RAM), aminek a bemenetei: feszültségszintek a fotorezisztorokról (ADC), rádió RX (interrupt), reset gomb (pull-up input), kimenetei: állapotjelző LED, motor irány (logikai 0-1) és sebesség (PWM) mindkét motorra. <a href="robot_rx.ino">forráskód</a></p>
+
+<p><img src="robot/robot_cu.jpg" alt="A robot vezérlőegysége" title="A robot vezérlőegysége" /></p>
+
+<p>A motor tápja (6 V) és a vezérlő tápja (5 V) külön vannak választva. A mikroprocesszor így egy optocsatolón keresztül vezérli az L293D H-híd IC-t, amit egy inverter IC is kiegészít.</p>
+
+<p><img src="robot/remote.jpg" alt="Joystick modulos távirányító" title="Joystick modulos távirányító" /></p>
+
+<p>A távirányítón egy ATTINY13A dolgozik, ami egy joystick modulból kiolvassa az X, Y értékeket, és egy gomb lenyomását, ezt ellenőrzőösszeggel együtt elküldi egy 433 MHz-es rádiós modulon keresztül. <a href="robot_tx.ino">forráskód</a></p>
+
+<p><img src="robot/rf_module.jpg" alt="433 MHz-es RF modul" title="433 MHz-es RF modul" /></p>
+<hr>
+Kapcsolat:
+<a href="mailto:f_dot_balazs96_at_gmail_dot_com">
+<img src="/email.png" alt="Email">
+</a>
+<a href="https://github.com/fenyesb">
+<img src="/github.png" alt="Github">
+</a>
+</body>
+</html>

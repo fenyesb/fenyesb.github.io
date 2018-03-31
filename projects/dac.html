@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<title>Fényes Balázs weboldala</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/github_markdown.css">
+<style>
+.markdown-body{box-sizing:border-box;min-width:200px;max-width:980px;margin:0 auto;padding:45px;}
+</style>
+<link rel="icon" href="/favicon.ico">
+<style type="text/css">
+code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
+</style>
+</head>
+<body class="markdown-body">
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
+    }
+});
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<a href="/index.html">&lt; Kezdőlap</a>
+<hr>
+<h1>Digitális/analóg konverter R-2R ellenálláslétrával</h1>
+
+<p>Összeraktam az alábbi kapcsolási rajz szerint működő D/A átalakítót, ami Arduino Mega-hoz használható. Az átalakítást egy ellenálláshálózat végzi, ami a pin-eken kiadott digitális feszültségszinteket binárisan súlyozva összegzi. <a href="https://en.wikipedia.org/wiki/Resistor_ladder">wikipédia leírás</a></p>
+
+<p><img src="dac/r2r_ladder.png" alt="Kapcsolási rajz" title="Kapcsolási rajz" /></p>
+
+<p>A felhasznált ellenállások R=10kΩ±1% és 2R=20kΩ±1% értékűek, így csatornánként 8 darab R és 8 darab 2R kellett. Legrosszabb esetben minden ellenállás hibája 1%, ekkor az összes hiba durván becsülve 2%, ami log(1/0.02)/log(2)=5.6 bit pontosságot eredményezne. Véletlenszerűen megmérve néhány R-et 9.98, 9.94, 10.01, 9.98 kΩ-ot kaptam a szintén ±1% pontosságú multiméteremmel, ami alapján kb. 7 bites vagy jobb pontosságra számíthatunk. Ezen még egy kicsit tudunk javítani, ha az MSB bitekhez rakjuk a pontosabb ellenállásokat, mert azok számítanak bele az eredménybe a legnagyobb súllyal.</p>
+
+<p><img src="dac/mega_pinout.png" alt="Arduino Mega pinout" title="Arduino Mega pinout" /></p>
+
+<p>Az Arduino Mega lábkiosztásából kiderül, hogy az A és a C port kimenetei sorrendben egymás mellett vannak, ezért én is ezt használtam a két csatornához, mert így a megvalósítás nagyon leegyszerűsödött. Így kaptam két 8-bites csatornát, amiket így lehet használni:</p>
+
+<pre><code>#define X PORTA
+#define Y PORTC
+DDRA = DDRC = 0xFF; //kimenet
+//feltételezzük, hogy 5V a tápfeszültség
+X = 127; //2.5V
+Y = 214; //4.2V
+</code></pre>
+
+<p><img src="dac/dac_front.jpg" alt="DAC eleje" title="DAC eleje" /></p>
+
+<p><img src="dac/dac_back.jpg" alt="DAC hátulja" title="DAC hátulja" /></p>
+
+<ul>
+<li>Flappy bird: <a href="dac_flappy.ino">forráskód</a> (ezt lehetett volna még továbbfejleszteni úgy, hogy az oszcilloszkóp Z bemenetével kikapcsolja a sugarat)</li>
+</ul>
+
+<p><video controls>
+  <source src="/videos/flappybird.mp4" type="video/mp4">
+</video> </p>
+
+<ul>
+<li>Sejtautomata: <a href="dac_cellular.ino">forráskód</a> (valós időben van generálva, a felbontás kb. 94×256 pixel, másodpercenként 30-szor újrarajzolva)</li>
+</ul>
+
+<p><video controls>
+  <source src="/videos/cellular.mp4" type="video/mp4">
+</video></p>
+
+<p>A két kimenet külön:</p>
+
+<p><video controls>
+  <source src="/videos/channels.mp4" type="video/mp4">
+</video></p>
+
+<p><img src="dac/dac_connected.jpg" alt="DAC az oszcilloszkóphoz csatlakoztatva" title="DAC az oszcilloszkóphoz csatlakoztatva" /></p>
+
+<p>Ezután a pontosságot ellenőriztem egy olyan programmal, ami a két csatornát egyszerre növelte, így az oszcilloszkópon egy egyenes lesz látható. Ha itt hirtelen szakadás lenne a felénél, akkor az az MSB ellenállás nagy hibájára utalna. Ha negyedenként, akkor a második bit ellenállása tér el nagyon ... stb. (<a href="dac_linear.ino">forráskód</a>)</p>
+
+<p>A rács felbontása a két képen 1V és 0.1V, a tápfeszültség kb. 4.8V (USB):</p>
+
+<p><img src="dac/dac_linear_1.jpg" alt="Mérés eredménye, felbontás: 1V/rács" title="Mérés eredménye, felbontás: 1V/rács" /></p>
+
+<p><img src="dac/dac_linear_2.jpg" alt="Mérés eredménye, felbontás: 0.1V/rács" title="Mérés eredménye, felbontás: 0.1V/rács" /></p>
+<hr>
+Kapcsolat:
+<a href="mailto:f_dot_balazs96_at_gmail_dot_com">
+<img src="/email.png" alt="Email">
+</a>
+<a href="https://github.com/fenyesb">
+<img src="/github.png" alt="Github">
+</a>
+</body>
+</html>
