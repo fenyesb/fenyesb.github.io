@@ -32,13 +32,15 @@ MathJax.Hub.Queue(function() {
 <hr>
 <h1>Transmitting images via sound from a computer monitor without speakers</h1>
 
+<p>The source code and a compiled executable is available at the <a href="https://github.com/fenyesb/monitor-sound">repository</a>.</p>
+
 <p>The main idea is that, as the screen refreshes, there is a capacitor (or more of them) inside the screen, which charges/discharges depending on the color of currently drawn pixel. Due to the structure of this (surface mount) capacitor, it will slightly change shape depending on the applied voltage. This shape change is amplified through the circuit board onto which it is soldered. It is easy to see, that this resembles a speaker, where the circuit board acts as the membrane of the speaker.</p>
 
 <p>The screen draws the image as many horizontal lines. I will change the brightness (between black and white) of these lines, to create the sound waveform. The human hearing ranges from 20 Hz to 20 kHz, but I could only create sound with this method above 2 kHz. There are also numerous noise sources (for example: computer fans) at lower frequencies. I got the best results between 5 kHz to 10 kHz.</p>
 
-<p>Imagine a common 1920×1080 pixel 60 Hz display panel, and I want to create a 10 kHz sine wave sound as an output. Let's calculate the width of this sine wave: $\frac{1}{10000~Hz}\cdot 60~Hz\cdot 1080~px\approx 6.5~px$. (This means that we start from black, then go to white after 3.25 lines, then go to black after 3.25 lines.) I would violate the <a href="https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem">sampling theorem</a> when the result were less than 2 pixels, but fortunately this is not the case here.</p>
+<p>Imagine a common 1920×1080 pixel 60 Hz display panel, and I want to create a 10 kHz sine wave sound as an output. Let's calculate the width of this sine wave: $\frac{1}{10000~Hz}\cdot 60~Hz\cdot 1080~px\approx 6.5~px$. (This means that it starts from black, then go to white after 3.25 lines, then go to black after 3.25 lines.) I would violate the <a href="https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem">sampling theorem</a> when the result were less than 2 pixels, but fortunately this is not the case here.</p>
 
-<p>We will transmit the following image:</p>
+<p>The following image will be trasmitted:</p>
 
 <p><img src="fourier/wave_original.png" alt="Original waveform" title="Original waveform" /></p>
 
@@ -50,7 +52,7 @@ MathJax.Hub.Queue(function() {
   <source src="/videos/fourier.mp4" type="video/mp4">
 </video> </p>
 
-<p>The resulting whistling sound is noticable, but quiet. I used a sound analyzer application on my phone to reconstruct the original image. This application calculates the Fourier-transform of the waveform from the microphone of the phone. I could only get good results, when I put the microphone of the phone directly in front of the screen.</p>
+<p>The resulting whistling sound is noticable, but too quiet to record unless the phone is held directly next to the screen. I used a sound analyzer application on my phone to reconstruct the original image. This application calculates the Fourier-transform of the waveform from the microphone of the phone.</p>
 
 <p><img src="fourier/wave_reconstructed.png" alt="Reconstructed waveform" title="Reconstructed waveform" /></p>
 <hr>
