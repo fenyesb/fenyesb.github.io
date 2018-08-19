@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<title>Fényes Balázs weboldala</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/github_markdown.css">
+<style>
+.markdown-body{box-sizing:border-box;min-width:200px;max-width:980px;margin:0 auto;padding:45px;}
+</style>
+<link rel="icon" href="/favicon.ico">
+<style type="text/css">
+code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
+</style>
+</head>
+<body class="markdown-body">
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
+    }
+});
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<a href="/index.html">&lt; Kezdőlap</a>
+<hr>
+<h1>WiFi Weather Station with Forecast</h1>
+
+<p>I often found myself checking the weather forecast on my phone before  leaving my home to choose the appropriate clothing. This may not seem a time-consuming habit, but because everyone in my family looks up the weather, this adds up quickly. The idea was to create a gadget, that shows the current weather and the forecast for the next few days. The requirements: easy to use, easy to understand, always working, reliable information. I used <a href="https://www.wunderground.com/weather/api/d/docs">Weather Undeground's web API</a> to periodically query the weather forecast and the current weather conditions.</p>
+
+<p><a href="weatherstation/weatherstation_light.jpg"><img src="weatherstation/small_weatherstation_light.jpg" alt="Weather station in a bright environment" title="" /></a></p>
+
+<p>The brains of the project is an Arduino Mega microcontroller board, its task is to download the forecast from the internet, process it, and display it, then wait some time, and start again. There are a quite a few challanges to overcome:</p>
+
+<ul>
+<li><p>The Arduino Mega can't connect to the internet by itself, unless an additional module is connected to it (Ethernet module or WiFi module), I chose the ESP-01 board, which has an ESP8266 microprocessor on it, and the communication is done via a serial port. It was easy to integrate this module into the project.</p></li>
+<li><p>I use the <em>10-day hourly</em> forecast API, which returns a <a href="weatherstation/weather_response.txt">~300 KB (!) response</a>, the format is JSON (key-value pairs in Javascript style). The microcontroller only has 8 KB memory, so either it has to be processed (that means to extract the numerical values of the temperature, humidity etc.) in seperate chunks (each hourly data point is around 1 KB), or it has to be pre-processed elsewhere beforehand. It is also possible to program the ESP8266 to do this task, but it has also doesn't have enough memory to do it in one step. Therefore I uploaded a PHP script to a server to compress it by removing a lot of unnecessary or unused parts. The <a href="weatherstation/weather_response_compressed.txt">compressed response</a> takes less than 3 KB of space that fits easily in the memory of the Arduino Mega.</p></li>
+<li><p>During testing I found, that very rarely the data download fails (around 2% of the time). Because the forecast is updated rarely, this equates to around one failure per day. In this case the code can't progress further, and the device will freeze and has to be reset manually. I didn't investigate the exact cause of it yet (may be a timeout problem, or weak signal). For workaround I implemented a 15 second watchdog timer, which will reset the device automatically, when a failure is encountered.</p></li>
+</ul>
+
+<p><a href="weatherstation/weatherstation_disassembled.jpg"><img src="weatherstation/small_weatherstation_disassembled.jpg" alt="The components of the project: screen, microcontroller, WiFi module, light sensor, buttons, power supply, case" title="" /></a></p>
+
+<p>The user is able to select an hour in the future, to display its temperature, humidity, wind speed, cloud coverage, rain probability, a textual description, and a picture; this is done with the two large red buttons. After a few seconds the selection will disappear, and the current weather data will be displayed. There is also a light sensor (a photoresistor) to change the screen brightness; this makes it readable in daylight, but also comfortably readable in total darkness - it is not blinding to look at during the night.</p>
+
+<p><a href="weatherstation/weatherstation_dark.jpg"><img src="weatherstation/small_weatherstation_dark.jpg" alt="Weather station in the dark with the LCD lit up " title="" /></a></p>
+
+<p><a href="weatherstation/weatherstation_box.jpg"><img src="weatherstation/small_weatherstation_box.jpg" alt="The completed device in a plastic case" title="" /></a></p>
+
+<p>The screen is also touch-sensitive, this is used to turn off/on the backlight completely. Here you can see a demonstration:</p>
+
+<p><video controls>
+  <source src="/videos/weatherstation_demo.mp4" type="video/mp4">
+</video></p>
+
+<p>When both buttons are pressed and held, a debug screen will be shown with information about how many times a button was pressed, how many times the device started up, and so on. This is stored in the EEPROM non-volatile memory.</p>
+
+<p><a href="weatherstation/weatherstation_debug.jpg"><img src="weatherstation/small_weatherstation_debug.jpg" alt="The hidden debugging screen" title="" /></a></p>
+<hr>
+Kapcsolat:
+<a href="mailto:f_dot_balazs96_at_gmail_dot_com">
+<img src="/email.png" alt="Email">
+</a>
+<a href="https://github.com/fenyesb">
+<img src="/github.png" alt="Github">
+</a>
+</body>
+</html>
