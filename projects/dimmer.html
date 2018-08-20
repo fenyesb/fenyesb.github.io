@@ -32,9 +32,25 @@ MathJax.Hub.Queue(function() {
 <hr>
 <h1>Remote Controlled Lightbulb Dimmer</h1>
 
-<p><a href="dimmer/dimmer_inside.jpg"><img src="dimmer/small_dimmer_inside.jpg" alt="Dimmer disassembled showing the power supply, microcontroller and the high voltage board" title="" /></a></p>
+<p>With this device you can control the brightness of any incandescent lamp. A special semiconductor (called a <a href="https://en.wikipedia.org/wiki/TRIAC">TRIAC</a>) is used to turn on and off the lamp very quickly. The more time it is turned on compared to off, the brighter the lamp is.</p>
 
-<p><a href="weatherstation/dimmer_case.jpg"><img src="dimmer/small_dimmer_case.jpg" alt="The dimmer in a plastic case" title="" /></a></p>
+<p><a href="dimmer/dimmer_case.jpg"><img src="dimmer/small_dimmer_case.jpg" alt="The dimmer in a plastic case" title="The dimmer in a plastic case" /></a></p>
+
+<p>This picture shows the working principle of a TRIAC (source: <a href="https://www.electronics-tutorials.ws/">www.electronics-tutorials.ws</a>):</p>
+
+<p><img src="dimmer/waveform.png" alt="Waveform of the AC input voltage and the lamp's volage over time" title="Waveform of the AC input voltage and the lamp's volage over time" /></p>
+
+<p>In the plastic case there is a 5V power supply, a microcontroller, and a high voltage board.</p>
+
+<p><a href="dimmer/dimmer_inside.jpg"><img src="dimmer/small_dimmer_inside.jpg" alt="Dimmer disassembled showing the power supply, microcontroller and the high voltage board" title="Dimmer disassembled showing the power supply, microcontroller and the high voltage board" /></a></p>
+
+<p>The high voltage board contains a TRIAC, an optotriac and an optoisolator for zero-crossing detection. (TRIAC: acts like a switch, optotriac: turns on the switch, optoisolator: detects when the wave begins)</p>
+
+<p>The microcontroller receives the button presses from an infrared remote, and changes the lamp's brightness in 10% steps. Demonstration video:</p>
+
+<p><video controls>
+  <source src="/videos/dimmer_demo.mp4" type="video/mp4">
+</video></p>
 <hr>
 Kapcsolat:
 <a href="mailto:f_dot_balazs96_at_gmail_dot_com">
