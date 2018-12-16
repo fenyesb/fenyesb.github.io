@@ -1,4 +1,4 @@
--e //Keszitette: Fenyes Balazs (fenyesb.github.io)
+//Keszitette: Fenyes Balazs (fenyesb.github.io)
 
 #define X PORTA
 #define Y PORTC

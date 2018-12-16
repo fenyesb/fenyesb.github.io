@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<title>Fényes Balázs weboldala</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/github_markdown.css">
+<style>
+.markdown-body{box-sizing:border-box;min-width:200px;max-width:980px;margin:0 auto;padding:45px;}
+</style>
+<link rel="icon" href="/favicon.ico">
+<style type="text/css">
+code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
+</style>
+</head>
+<body class="markdown-body">
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
+    }
+});
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<a href="/index.html">&lt; Kezdőlap</a>
+<hr>
+<h1>Video Game For STM32F429ZI</h1>
+
+<p>A video game for the <a href="https://www.st.com/en/evaluation-tools/32f429idiscovery.html">Discovery kit with STM32F429ZI</a>. In the game you control a car with the touch screen. Tilemapped graphics, vehicle and collision physics.</p>
+
+<p>Video of the game:</p>
+
+<p><video controls>
+    <source src="/videos/gta_demo.mp4" type="video/mp4">
+</video></p>
+
+<p>The development board has a touch screen and accelerometer:</p>
+
+<p><a href="gta/dev_board.jpg"><img src="gta/small_dev_board.jpg" alt="STM32F429ZI development board" title="STM32F429ZI development board" /></a></p>
+
+<p>Photos of the game:</p>
+
+<p><a href="gta/debug.jpg"><img src="gta/small_debug.jpg" alt="Debug screen" title="Debug screen" /></a></p>
+
+<p><a href="gta/ingame.jpg"><img src="gta/small_ingame.jpg" alt="In-game" title="In-game" /></a></p>
+
+<h2>Tilemapping</h2>
+
+<p>The map is a rectangular array of indicies, each index indicates which texture to draw at that location.</p>
+
+<p>The tileset:</p>
+
+<p><img src="gta/tiles.png" alt="The tiles" title="The tiles" /></p>
+
+<p>The palette:</p>
+
+<p><img src="gta/palette.png" alt="The palette" title="The palette" /></p>
+
+<p>The map:</p>
+
+<p><img src="gta/map.png" alt="The map" title="The map" /></p>
+
+<pre><code>//Draw the map
+void draw_map(int cx, int cy)
+{
+    int startx = max(0, cx / TILE_SIZE);
+    int starty = max(0, cy / TILE_SIZE);
+    int endx = min(MAP_WIDTH-1, (cx+SCREEN_WIDTH) / TILE_SIZE);
+    int endy = min(MAP_WIDTH-1, (cy+SCREEN_HEIGHT) / TILE_SIZE);
+    for (int x = startx; x &lt;= endx; x++)
+    {
+        for (int y = starty; y &lt;= endy; y++)
+        {
+            draw_tile(map[y * MAP_WIDTH + x], x * TILE_SIZE - cx, y * TILE_SIZE - cy);
+        }
+    }
+}
+
+//Draw one tile
+void draw_tile(int ix, int offsetx, int offsety)
+{
+    if (offsetx &lt;= -TILE_SIZE || offsety &lt;= -TILE_SIZE || offsetx &gt;= 240 || offsety &gt;= 320)
+    {
+        //tile is out of screen, don't draw anything
+        return;
+    }
+    else if (offsetx &gt;= 0 &amp;&amp; offsety &gt;= 0 &amp;&amp; offsetx &lt; 240 - TILE_SIZE &amp;&amp; offsety &lt; 320 - TILE_SIZE)
+    {
+        //tile is fully inside the screen
+        BSP_LCD_DrawBitmap_Tile32(offsetx, offsety, ix, &amp;tilemap);
+    }
+    else
+    {
+        //tile is partially in the screen, check each pixel
+        for (int i = 0; i &lt; TILE_SIZE; i++)
+        {
+            for (int j = 0; j &lt; TILE_SIZE; j++)
+            {
+                if (offsetx + i &gt;= 0 &amp;&amp; offsetx + i &lt; 240 &amp;&amp; offsety + j &gt;= 0 &amp;&amp; offsety + j &lt; 320)
+                {
+                    BSP_LCD_DrawPixel(offsetx + i, offsety + j, tilemap[i + ix * TILE_SIZE * TILE_SIZE + j * TILE_SIZE]);
+                }
+            }
+        }
+    }
+}
+</code></pre>
+
+<h2>Collision physics</h2>
+
+<p>Calculate the distance from every nearby tile and if they are too close, push the car in the opposite direction.</p>
+
+<pre><code>void simulate_collision() {
+    int startx = max(0, (int)(px / TILE_SIZE) - 2);
+    int starty = max(0, (int)(py / TILE_SIZE) - 2);
+    int endx = min(MAP_WIDTH - 1, (int)(px / TILE_SIZE) + 2);
+    int endy = min(MAP_HEIGHT - 1, (int)(py / TILE_SIZE) + 2);
+    for(int x = startx; x &lt;= endx; x++)
+    {
+        for(int y = starty; y &lt;= endy; y++)
+        {
+            float centerx = x * 32 + 16;
+            float centery = y * 32 + 16;
+            float dx = px - centerx;
+            float dy = py - centery;
+            const float force = 1.5;
+            float d = hypot(dx, dy);
+            int id = map[y * MAP_WIDTH + x];
+            if(d &lt; 100 &amp;&amp; (id == 0 || id == 1 || id == 2 || id == 3 || id == 7))
+            {
+                float ang = atan2(dy, dx);
+                float f = max(0, 10 - d / 4) * force;
+                vx += f * cos(ang);
+                vy += f * sin(ang);
+            }
+        }
+    }
+}
+</code></pre>
+
+<h2>Car physics</h2>
+
+<p>The car has a position (<em>px</em>, <em>py</em>) and velocity (<em>vx</em>, <em>vy</em>) vector, also the rotation speed (<em>omega</em>) and the direction (<em>phi</em>) is stored.</p>
+
+<p><img src="gta/gta_car.png" alt="Car" title="Car" /></p>
+
+<pre><code>void simulate_movement(int touch, float an) { //kocsi mozgásának szimulációja
+
+    //if touched, accelerate the car
+    if (touch) {
+        const float acceleration = 1;
+
+        float delta_v_touch = cos(phi) * cos(an) + sin(phi) * sin(an);
+
+        vx += cos(an) * delta_v_touch * acceleration;
+        vy += sin(an) * delta_v_touch * acceleration;
+    }
+
+    //slow down velocity
+    const float resistance_linear = .05;
+    vx -= vx * resistance_linear;
+    vy -= vy * resistance_linear;
+
+    const float resistance_quadratic = .01;
+    vx -= (vx &gt; 0 ? 1 : -1) * vx * vx * resistance_quadratic;
+    vy -= (vy &gt; 0 ? 1 : -1) * vy * vy * resistance_quadratic;
+
+    //if touched, rotate the car
+    if (touch) {
+        const float rot_speed = .05;
+        omega += angle_diff(phi, an) * rot_speed;
+    }
+
+    //slow down rotation
+    const float rot_resistance = .2;
+    omega -= omega * rot_resistance;
+
+    //limit rotation
+    const float rot_limit = .3;
+    float rot_angle = limit(omega, -rot_limit, rot_limit);
+
+    //rotate velocity vector
+    vx = vx * cos(rot_angle) + vy * -sin(rot_angle);
+    vy = vx * sin(rot_angle) + vy * cos(rot_angle);
+
+    //move car
+    px += vx;
+    py += vy;
+
+    //rotate car
+    phi += omega;
+
+    //limit rotation value to [-pi, pi]
+    phi = fmod(phi + M_PI, 2 * M_PI);
+    phi -= M_PI;
+}
+</code></pre>
+<hr>
+Kapcsolat:
+<a href="mailto:f_dot_balazs96_at_gmail_dot_com">
+<img src="/email.png" alt="Email">
+</a>
+<a href="https://github.com/fenyesb">
+<img src="/github.png" alt="Github">
+</a>
+</body>
+</html>
