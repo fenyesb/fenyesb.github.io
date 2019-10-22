@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<title>Fényes Balázs weboldala</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/github_markdown.css">
+<style>
+.markdown-body{box-sizing:border-box;min-width:200px;max-width:980px;margin:0 auto;padding:45px;}
+</style>
+<link rel="icon" href="/favicon.ico">
+<style type="text/css">
+code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
+</style>
+</head>
+<body class="markdown-body">
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
+    }
+});
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<a href="/index.html">&lt; Kezdőlap</a>
+<hr>
+<h1>Ultrasonic Parking Distance Meter</h1>
+
+<p>This gadget contains two parts: the first is the seven-segment display controlled by an Arduino Nano, the second is the ultrasonic module. <a href="ultrasonic/us_module.pdf">The datasheet of the HC-SR04 ultrasonic module.</a> This device is placed in a car garage, the display is at eye-level, the ultrasonic module is located at the height of the car's licence plate. This is necessary, because the ultrasonic module works by sending and receiving an ultrasonic sound pulse, and the sound pulse needs a flat surface to reflect back into the module.</p>
+
+<p><a href="ultrasonic/ultrasonic_module.jpg"><img src="ultrasonic/small_ultrasonic_module.jpg" alt="The HC-SR04 ultrasonic module" title="The HC-SR04 ultrasonic module" /></a></p>
+
+<p>From the time between the sending and receiving of the sound pulse, the distance to the car can be calculated. After testing the device, I could see that there were almost no variation in the measured distance when the car was stopped. However these measurements are not exactly accurate, because to calculate the distance, the speed of sound needs to be known, but that changes with the temperature of the air. This device does not account for it. I built this device, because our garage was small, and it was hard to see how much space was left in front of the car during parking. Now it is easy and safe to park the car.</p>
+
+<p><a href="ultrasonic/ultrasonic_display.jpg"><img src="ultrasonic/small_ultrasonic_display.jpg" alt="Photo of the display" title="Photo of the display" /></a></p>
+<hr>
+Kapcsolat:
+<a href="mailto:f_dot_balazs96_at_gmail_dot_com">
+<img src="/email.png" alt="Email">
+</a>
+<a href="https://github.com/fenyesb">
+<img src="/github.png" alt="Github">
+</a>
+</body>
+</html>
