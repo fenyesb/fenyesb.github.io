@@ -30,7 +30,7 @@ MathJax.Hub.Queue(function() {
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 <a href="/index.html">&lt; Homepage</a>
 <hr>
-<h1>Electric bike</h1>
+<h1>Electric Bike</h1>
 
 <p>I attempted to convert my unused mountain bike into an electric bicycle. I tried multiple methods starting with the easiest and cheapest friction drive. After learning more about how an electric motor works I replaced it with a geared motor that drives the wheel through a chain. After being dissatisfied with the performance, I replaced it with a the motor, that is built into the wheel hub.</p>
 
@@ -43,6 +43,14 @@ MathJax.Hub.Queue(function() {
 <p>I used the MY1025 electric motor, which can be purchased for an extremely low price. This is a very simple DC motor, rated for 2750 RPM at 24 V input voltage. This is the achieved rotation speed if the output is 250 W and the input is about 320 W. At this point, the motor should generate about 70 W waste heat, which it will dissipate through its casing. Above the rated load, the motor will overheat over time. I didn't find a datasheet for this motor, but its parameters can be measured or calculated. For an electric bicycle the final speed will depend on the rider mass, wind, road inclination, motor rotation speed, battery voltage, and many other things. This is a very complicated calculation, and it is better to use a <a href="https://www.ebikes.ca/tools/simulator.html">simulator</a>.</p>
 
 <p>The friction drive is completely quiet, but you can feel it pushing the the bicycle. This is probably its only advantage.</p>
+
+<h2>DC motor equations</h2>
+
+<p>The performance characteristics of a DC motor is easily calculated. The controller modulates the battery voltage with PWM, this results in $U$ voltage being applied to the motor. The motor's copper windings has an $R$ resistance value (can be measured with a multimeter). The motor generates an $E$ back-emf voltage when it rotates: the faster it rotates, the more voltage it generates, this depends on the $K_v$ constant (see: <a href="https://en.wikipedia.org/wiki/Motor_constants">Motor constants</a>). The current through the motor will be $I_{motor}=(U-E)/R$. The power input of to the motor is $U\cdot I_{battery}$. The current from the battery is not the same as the current of the motor at low speeds due to the motor's inductance. The mechanical output of the motor is $\tau\cdot\omega$, that is torque multiplied by the angular rotation rate. The torque is proportional to the motor current (see: motor torque constant).</p>
+
+<p><img src="ebike/dc_motor_curves.png" alt="Typical DC motor characteristics" title="Typical DC motor characteristics" />]</p>
+
+<p>For a DC motor the maximal power output is reached at around 50% of the no-load speed. At this speed, the efficiency is also 50%, so the same amount of power must be dissipated as heat. For maximal efficiency, the motor should rotate fast, and the current should be low, this is achieved at about 80% of the no-load speed. The bicycle should be designed to operate near this region.</p>
 
 <h2>Chain drive</h2>
 
